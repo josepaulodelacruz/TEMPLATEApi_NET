@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using TemplateAPI.Middlewares;
 using TemplateAPI.Services;
 
 var builder = WebApplication.CreateBuilder(args);

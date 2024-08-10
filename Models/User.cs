@@ -18,6 +18,11 @@ namespace TemplateAPI.Models
         [MinLength(8, ErrorMessage = "Password must be at least 8 characters")]
         public string Password { get; set; } = "";
 
+        public string System { get; set; } = "DEFAULT";
+
+        public string Token { get; set; } = "";
+        public DateTime Timestamp { get; set; }
+
         public string EncryptPassword (string password)
         {
             string _password = password;

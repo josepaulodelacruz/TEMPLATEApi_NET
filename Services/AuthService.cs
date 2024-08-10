@@ -42,15 +42,19 @@ namespace TemplateAPI.Services
                         cmd.Parameters.AddWithValue("@EMAIL", user.Email);
                         cmd.Parameters.AddWithValue("@PASSWORD", user.Password);
 
+
                         using (SqlDataReader reader = await cmd.ExecuteReaderAsync())
                         {
                             while (await reader.ReadAsync())
                             {
                                 loggedUser.Id = reader.GetInt32(reader.GetOrdinal("ID"));
                                 loggedUser.Email = reader["EMAIL"].ToString();
+                                loggedUser.System = reader["SYSTEM"].ToString();
+                                loggedUser.Token = reader["TOKEN"].ToString();
+                                loggedUser.Timestamp = DateTime.Parse(reader["TIMESTAMP"].ToString());
                             }
 
-                            if(string.IsNullOrEmpty(loggedUser.Email))
+                            if (string.IsNullOrEmpty(loggedUser.Email))
                             {
                                 response.StatusCode = 401;
                                 response.Message = "Incorrect login credentials";
@@ -95,10 +99,11 @@ namespace TemplateAPI.Services
                         cmd.Parameters.AddWithValue("@Flag", "Create User");
                         cmd.Parameters.AddWithValue("@EMAIL", user.Email);
                         cmd.Parameters.AddWithValue("@PASSWORD", user.Password);
+                        cmd.Parameters.AddWithValue("@SYSTEM", user.System);
 
                         int isCreated = cmd.ExecuteNonQuery();
 
-                        if(isCreated == 0)
+                        if (isCreated == 0)
                         {
                             response.StatusCode = 401;
                             response.Message = "Failed to register this user.";
@@ -113,7 +118,7 @@ namespace TemplateAPI.Services
 
                     }
                 }
-            } 
+            }
             catch (SqlException Ex)
             {
                 if (Ex.Number == 2601 || Ex.Number == 2627)
@@ -129,6 +134,8 @@ namespace TemplateAPI.Services
                 response.StatusCode = 501;
                 return response;
             }
-        } 
+        }
     }
+
 }
+

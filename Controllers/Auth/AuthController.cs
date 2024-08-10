@@ -27,7 +27,7 @@ namespace TemplateAPI.Controllers.Auth
         // GET: api/auth/register
         [Route("register")]
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] User user)
+        public async Task<IActionResult> Register([FromBody] User user)
         {
             var validationResults = new List<ValidationResult>();
             var isValid = Validator.TryValidateObject(user, new ValidationContext(user), validationResults);
