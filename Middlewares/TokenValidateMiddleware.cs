@@ -1,35 +1,37 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using TemplateAPI.Services;
 
 namespace TemplateAPI.Middlewares
 {
     public class TokenValidateMiddleware
     {
         private readonly RequestDelegate _next;
+        private readonly AuthService _service;
 
-        public TokenValidateMiddleware(RequestDelegate next)
+        public TokenValidateMiddleware(RequestDelegate next, IConfiguration configuration)
         {
             _next = next;
+            _service = new AuthService(conString: configuration.GetConnectionString("database"));
         }
 
         public async Task InvokeAsync(HttpContext context)
         {
-            Debug.WriteLine("validating authenticated key");
+            // Retrieve the token from the Authorization header
+            string token = context.Request.Headers["Authorization"].ToString().Replace("Bearer ", "");
+            Debug.WriteLine(token);
 
-            bool authValidated = true;
+            var response = await _service.ValidateToken(token);
 
-            if (authValidated)
+            if (!response.IsError)
             {
-                Debug.WriteLine("validating authenticated key success");
                 await _next(context);
             } else
             {
                 context.Response.StatusCode = 401;
                 await context.Response.WriteAsync("Unauthorized");
             }
-
-
         }
     }
 

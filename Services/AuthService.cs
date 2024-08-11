@@ -13,6 +13,8 @@ namespace TemplateAPI.Services
         public Task<Response> Register(User user);
 
         public Task<Response> Login(User user);
+
+        public Task<Response> ValidateToken(string token);
     }
     public class AuthService : IAuthService
     {
@@ -134,6 +136,62 @@ namespace TemplateAPI.Services
                 response.StatusCode = 501;
                 return response;
             }
+        }
+
+        public async Task<Response> ValidateToken(string token)
+        {
+            string _token = "";
+            var response = new Response();
+            try
+            {
+                string query = "[dbo].[NSP_AuthUser]";
+
+                using (SqlConnection con = new SqlConnection(_conString))
+                {
+                    await con.OpenAsync();
+                    
+                    using (SqlCommand cmd = new SqlCommand(query, con))
+                    {
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@Flag", "Validate Token");
+                        cmd.Parameters.AddWithValue("@TOKEN", token);
+
+                        using (SqlDataAdapter ad = new SqlDataAdapter(cmd))
+                        {
+                            DataTable dt = new DataTable();
+                            ad.Fill(dt);
+
+                            // Check if DataTable is empty
+                            if (dt.Rows.Count == 0)
+                            {
+                                throw new Exception("Invalid Token.");
+                            }
+
+                            response.IsError = false;
+                            response.StatusCode = 200;
+                            response.Message = "Authorized";
+
+                            return response;
+
+                        }
+                    }
+
+                }
+            }
+            catch (SqlException Ex)
+            {
+                response.IsError = true;
+                response.StatusCode = 501;
+                response.Message = Ex.Message;
+            }
+            catch (Exception Ex)
+            {
+                response.IsError = true;
+                response.StatusCode = 501;
+                response.Message = Ex.Message;
+            }
+
+            return response;
         }
     }
 

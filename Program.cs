@@ -39,7 +39,6 @@ if (app.Environment.IsDevelopment())
 
 //var conString = builder.Configuration.GetConnectionString("database");
 
-
 app.UseCors("AllowLocalhost");
 
 app.UseHttpsRedirection();

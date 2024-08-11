@@ -1,6 +1,7 @@
 @TemplateAPI_HostAddress = http://localhost:5164
 
-GET {{TemplateAPI_HostAddress}}/api/Auth
+GET {{TemplateAPI_HostAddress}}/api/Accounts
 Accept: application/json
+Authorization: Bearer 81147610-38BD-4DA8-9079-4C39F34E71C3
 ##
 
