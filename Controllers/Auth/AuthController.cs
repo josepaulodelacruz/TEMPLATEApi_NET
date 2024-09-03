@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using TemplateAPI.Models;
 using TemplateAPI.Services;
 
@@ -38,7 +39,7 @@ namespace TemplateAPI.Controllers.Auth
 
             response = await _authService.Register(user);
 
-            if(!response.IsError)
+            if(response.IsError)
             {
                 return new BadRequestObjectResult(response);
             }

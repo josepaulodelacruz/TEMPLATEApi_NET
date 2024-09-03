@@ -56,6 +56,7 @@ namespace TemplateAPI.Services
                                 loggedUser.Timestamp = DateTime.Parse(reader["TIMESTAMP"].ToString());
                             }
 
+                            Debug.WriteLine(response.Message);
                             if (string.IsNullOrEmpty(loggedUser.Email))
                             {
                                 response.StatusCode = 401;
