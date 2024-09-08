@@ -23,9 +23,9 @@ namespace TemplateAPI.Models
         public string Token { get; set; } = "";
         public DateTime Timestamp { get; set; }
 
-        public string EncryptPassword (string password)
+        public string EncryptPassword ()
         {
-            string _password = password;
+            string _password = this.Password;
             byte[] data = Encoding.UTF8.GetBytes(_password);
 
             using (SHA256 sha256 = SHA256.Create())

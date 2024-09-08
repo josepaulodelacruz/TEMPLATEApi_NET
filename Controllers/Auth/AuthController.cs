@@ -35,7 +35,7 @@ namespace TemplateAPI.Controllers.Auth
             var response = new Response();
 
             //encrypt password
-            user.Password = user.EncryptPassword(user.Password);
+            user.Password = user.EncryptPassword();
 
             response = await _authService.Register(user);
 
@@ -56,7 +56,7 @@ namespace TemplateAPI.Controllers.Auth
             var response = new Response();
 
             //encrypt password
-            user.Password = user.EncryptPassword(user.Password);
+            user.Password = user.EncryptPassword();
 
             response = await _authService.Login(user);
 
